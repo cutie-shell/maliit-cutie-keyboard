@@ -31,15 +31,14 @@
  */
 
 import QtQuick 2.6
-import org.nemomobile 1.0
+import org.cutieshell 1.0
+import org.nemomobile.configuration 1.0
 
 Item {
     id: canvas
 
     width: MInputMethodQuick.screenWidth
     height: MInputMethodQuick.screenHeight
-    //width: Screen.desktopAvailableWidth
-    //height: Screen.desktopAvailableHeight
 
     property bool portraitRotated: width > height
     property bool portraitLayout: portraitRotated ?
@@ -76,6 +75,20 @@ Item {
         MInputMethodQuick.setScreenRegion(Qt.rect(x, y, width, height))
     }
 
+    property ConfigurationValue themeVariantConfig: themeVariant
+    ConfigurationValue {
+        id: themeVariant
+        key: "/home/cutie/theme/variant"
+        defaultValue: "dark"
+    }
+    
+    property ConfigurationValue dpi: dpiConfig
+    ConfigurationValue {
+        id: dpiConfig
+        key: "/home/cutie/homeScreen/dpi"
+        defaultValue: Screen.pixelDensity
+    }
+
     Item {
         // container at the of current orientation. allows actual keyboard to show relative to that.
         id: root
@@ -92,10 +105,9 @@ Item {
         y: MInputMethodQuick.appOrientation == 0 || MInputMethodQuick.appOrientation == 270
            ? parent.height : 0
 
-        Rectangle{
+        Item{
             id: keyboardBack
             anchors.fill: keyboard
-            color: Theme.backgroundColor
         }
 
         KeyboardBase {

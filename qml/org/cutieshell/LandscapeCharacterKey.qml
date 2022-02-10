@@ -5,8 +5,8 @@ CharacterKey {
     width: keyArea.width / 10
     height: keyArea.height / 4
 
-    topPadding: Theme.itemSpacingExtraSmall
+    topPadding: dpi.value
     bottomPadding: topPadding
-    leftPadding: Theme.itemSpacingExtraSmall/2
+    leftPadding: dpi.value / 2
     rightPadding: leftPadding
 }

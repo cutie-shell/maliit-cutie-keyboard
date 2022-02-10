@@ -1,7 +1,9 @@
 /*
  * This file is part of Maliit plugins
  *
- * Copyright (C) Jakub Pavelek <jpavelek@live.com>
+ * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+ *
+ * Contact: Jakub Pavelek <jpavelek@live.com>
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -30,64 +32,65 @@
 import QtQuick 2.6
 import "KeyboardUiConstants.js" as UI
 import QtQuick.Controls.Styles.Nemo 1.0
+import QtGraphicalEffects 1.15
 
+KeyBase {
+    id: aFunctKey
 
-Image {
-    id: popper
-    source: "popper.png"
+    property string icon
+    property string caption
+    property int sourceWidth: -1
+    property int sourceHeight: -1
 
-    width: target ? target.width*1.2 : 0
-    height: target ? target.height*1.2 : 0
-    opacity: 0
-    visible: target ? true : false
-    anchors.bottomMargin: Theme.itemSpacingExtraSmall
-    property Item target: null
+    topPadding: Theme.itemSpacingExtraSmall
+    bottomPadding: topPadding
+    leftPadding: Theme.itemSpacingExtraSmall/2
+    rightPadding: leftPadding
+
+    showPopper: false
+
+    Rectangle {
+        color: (themeVariantConfig.value == "dark") ? "#60000000" : "#6fffffff"
+        anchors.fill: parent
+        anchors.leftMargin: leftPadding
+        anchors.rightMargin: rightPadding
+        anchors.topMargin: topPadding
+        anchors.bottomMargin: bottomPadding
+    }
+
+    Image {
+        id: iconImage
+        anchors.centerIn: parent
+        source: icon
+        width: parent.width/1.5
+        height: width
+
+        fillMode: Image.PreserveAspectFit
+
+        anchors.horizontalCenterOffset: (leftPadding - rightPadding) / 2
+
+        sourceSize.width: (sourceWidth == -1) ? width : sourceWidth
+        sourceSize.height: (sourceHeight == -1) ? height : sourceHeight
+    }
+
+    ColorOverlay {
+        anchors.fill: iconImage
+        source: iconImage
+        color: (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
+    }
 
     Text {
-        id: popperText
-        text: ""
+        id: text
         anchors.centerIn: parent
+        anchors.horizontalCenterOffset: Math.round((leftPadding - rightPadding) / 2)
+        width: parent.width - leftPadding - rightPadding - 4
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: Theme.fontSizeLarge
         font.family: "sans"
-        font.bold: true
-        color: Theme.textColor
-    }
-
-    states: State {
-        name: "active"
-        when: target !== null && target.showPopper
-
-        PropertyChanges {
-            target: popperText
-            text: target.text
-        }
-
-        PropertyChanges {
-            target: popper
-            opacity: 1
-
-            x: target ? popper.parent.mapFromItem(target, 0, 0).x + (target.width - popper.width) / 2 : popper.parent.mapFromItem(target, 0, 0).x + (0 - popper.width) / 2
-            y: popper.parent.mapFromItem(target, 0, 0).y - popper.height
-        }
-    }
-
-    transitions: Transition {
-        from: "active"
-
-        SequentialAnimation {
-            PauseAnimation {
-                duration: 50
-            }
-            PropertyAction {
-                target: popper
-                properties: "opacity, x, y"
-            }
-            PropertyAction {
-                target: popperText
-                property: "text"
-            }
-        }
+        font.weight: Font.Light
+        fontSizeMode: Text.HorizontalFit
+        font.pixelSize: 3 * dpi.value
+        color: (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
+        text: caption
     }
 }

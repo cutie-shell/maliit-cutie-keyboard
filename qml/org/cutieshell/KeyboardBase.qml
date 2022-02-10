@@ -120,7 +120,7 @@ Item {
         x:parent.width/2-tracker.width/2
         y:parent.height/2-tracker.height/2
         z: 100
-        color: Theme.accentColor
+        color: (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
         Drag.active: mouseArea.drag.active
         Timer {
             id: movetimer
@@ -207,15 +207,6 @@ Item {
                 }
             ]
         }
-    }
-
-    BorderImage {
-        width: parent.width;
-        height: parent.height
-        border { left: 1; top: 4; right: 1; bottom:0 }
-        horizontalTileMode: BorderImage.Repeat
-        verticalTileMode: BorderImage.Repeat
-        source: "vkb-body.png"
     }
 
     Connections {

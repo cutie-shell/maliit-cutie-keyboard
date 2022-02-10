@@ -31,67 +31,41 @@
 
 import QtQuick 2.6
 import "KeyboardUiConstants.js" as UI
+import QtQuick.Controls.Nemo 1.0
 import QtQuick.Controls.Styles.Nemo 1.0
 
+KeyBase  {
+    id: aCharKey
 
-
-KeyBase {
-    id: aFunctKey
-
-    property string icon
     property string caption
-    property int sourceWidth: -1
-    property int sourceHeight: -1
-    property string imagesrc: bgimg.source
-    //property alias text:text
+    property string captionShifted
+    property string symView
+    property string symView2
+    property string sizeType: "keyboard-key-43x60.png"
+    property int fontSize: 3 * dpi.value
+    property alias text: key_label.text
+    key: Qt.Key_Multi_key
 
-    topPadding: Theme.itemSpacingExtraSmall
-    bottomPadding: topPadding
-    leftPadding: Theme.itemSpacingExtraSmall/2
-    rightPadding: leftPadding
-
-    showPopper: false
-
-    BorderImage {
-        id: bgimg
-        border { left: 1; top: 4; right: 1; bottom:0 }
-        horizontalTileMode: BorderImage.Repeat
-        verticalTileMode: BorderImage.Repeat
-        source: parent.pressed ? "keyboard-key-portrait-function-pressed.png" : "keyboard-key-portrait-function.png"
-        anchors {
-            fill:parent
-            topMargin: topPadding
-            leftMargin: leftPadding
-            rightMargin: rightPadding
-            bottomMargin: bottomPadding
-        }
+    Rectangle {
+        color: (themeVariantConfig.value == "dark") ? "#40000000" : "#4fffffff"
+        anchors.fill: parent
+        anchors.leftMargin: leftPadding
+        anchors.rightMargin: rightPadding
+        anchors.topMargin: topPadding
+        anchors.bottomMargin: bottomPadding
     }
 
-    Image {
-        anchors.centerIn: parent
-        source: icon
-        width: parent.width/1.5
-        height: width
-
-        fillMode: Image.PreserveAspectFit
-
-        anchors.horizontalCenterOffset: (leftPadding - rightPadding) / 2
-
-        sourceSize.width: (sourceWidth == -1) ? width : sourceWidth
-        sourceSize.height: (sourceHeight == -1) ? height : sourceHeight
-    }
     Text {
-        id: text
+        id: key_label
         anchors.centerIn: parent
-        anchors.horizontalCenterOffset: Math.round((leftPadding - rightPadding) / 2)
-        width: parent.width - leftPadding - rightPadding - 4
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.family: "sans"
-        fontSizeMode: Text.HorizontalFit
-        font.pixelSize: Theme.fontSizeSmall
-        //font.bold: true
-        color: Theme.textColor//UI.TEXT_COLOR
-        text: caption
+        font.family: "Lato"
+        font.weight: Font.Light
+        font.pixelSize: fontSize
+        color:  (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
+        text: (inSymView && symView.length) > 0 ? (inSymView2 ? symView2 : symView)
+                                                : (isShifted ? captionShifted : caption)
     }
 }
+

@@ -1,9 +1,7 @@
 /*
  * This file is part of Maliit plugins
  *
- * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
- *
- * Contact: Jakub Pavelek <jpavelek@live.com>
+ * Copyright (C) Jakub Pavelek <jpavelek@live.com>
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,57 +29,65 @@
 
 import QtQuick 2.6
 import "KeyboardUiConstants.js" as UI
-import QtQuick.Controls.Nemo 1.0
 import QtQuick.Controls.Styles.Nemo 1.0
 
-KeyBase  {
-    id: aCharKey
 
-    property string caption
-    property string captionShifted
-    property string symView
-    property string symView2
-    property string sizeType: "keyboard-key-43x60.png"
-    property int fontSize: Theme.fontSizeMedium
-    property alias text: key_label.text
-    key: Qt.Key_Multi_key
+Rectangle {
+    id: popper
 
-/*
-    property string imagesrc: bgImage.source
-    BorderImage {
-        id: bgImage
-        border {left: 1; top:4; right:1;bottom:0}
-        horizontalTileMode: BorderImage.Repeat
-        verticalTileMode: BorderImage.Repeat
-        source: parent.pressed ? "keyboard-key-portrait-pressed.png" : "keyboard-key-portrait.png"
-        anchors.fill: parent
-        anchors.leftMargin: leftPadding
-        anchors.rightMargin: rightPadding
-        anchors.topMargin: topPadding
-        anchors.bottomMargin: bottomPadding
-    }
-*/
-
-    Rectangle {
-        color: parent.pressed ? Theme.fillDarkColor : Theme.fillColor
-        anchors.fill: parent
-        anchors.leftMargin: leftPadding
-        anchors.rightMargin: rightPadding
-        anchors.topMargin: topPadding
-        anchors.bottomMargin: bottomPadding
-    }
+    color: (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
+    width: target ? target.width*1.2 : 0
+    height: target ? target.height*1.2 : 0
+    opacity: 0
+    visible: target ? true : false
+    anchors.bottomMargin: dpi.value
+    property Item target: null
 
     Text {
-        id: key_label
+        id: popperText
+        text: ""
         anchors.centerIn: parent
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.family: "sans"
-        font.pixelSize: fontSize
-        font.bold: true
-        color:Theme.textColor// UI.TEXT_COLOR
-        text: (inSymView && symView.length) > 0 ? (inSymView2 ? symView2 : symView)
-                                                : (isShifted ? captionShifted : caption)
+        font.pixelSize: 3 * dpi.value
+        font.family: "Lato"        
+        font.weight: Font.Light
+        color: (themeVariantConfig.value == "dark") ? "#000000" : "#ffffff"
+    }
+
+    states: State {
+        name: "active"
+        when: target !== null && target.showPopper
+
+        PropertyChanges {
+            target: popperText
+            text: target.text
+        }
+
+        PropertyChanges {
+            target: popper
+            opacity: 1
+
+            x: target ? popper.parent.mapFromItem(target, 0, 0).x + (target.width - popper.width) / 2 : popper.parent.mapFromItem(target, 0, 0).x + (0 - popper.width) / 2
+            y: popper.parent.mapFromItem(target, 0, 0).y - popper.height
+        }
+    }
+
+    transitions: Transition {
+        from: "active"
+
+        SequentialAnimation {
+            PauseAnimation {
+                duration: 50
+            }
+            PropertyAction {
+                target: popper
+                properties: "opacity, x, y"
+            }
+            PropertyAction {
+                target: popperText
+                property: "text"
+            }
+        }
     }
 }
-
