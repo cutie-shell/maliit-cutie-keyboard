@@ -34,9 +34,20 @@
 
 import QtQuick 2.6
 import com.meego.maliitquick 1.0
+import QtFeedback 5.0
 
 Item {
     property Item pressedKey
+
+    HapticsEffect {
+        id: rumbleEffect
+        attackIntensity: 0.0
+        attackTime: 250
+        intensity: 1.0
+        duration: 100
+        fadeTime: 250
+        fadeIntensity: 0.0
+    }
 
     Timer {
         id: autorepeatTimer
@@ -115,6 +126,7 @@ Item {
     // called when button click was fully done or on autorepeat. can be reimplemented to handle input.
     // return true input was consumed.
     function handleKeyClick() {
+        rumbleEffect.start();
         return false
     }
 

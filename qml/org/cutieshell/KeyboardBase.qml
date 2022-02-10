@@ -35,6 +35,7 @@ import QtQuick 2.6
 import QtQuick.Controls.Styles.Nemo 1.0
 import com.meego.maliitquick 1.0
 import org.nemomobile.configuration 1.0
+import QtFeedback 5.0
 
 import "touchpointarray.js" as ActivePoints
 import "layouts.js"  as KLayouts
@@ -72,6 +73,16 @@ Item {
     // if height changed while touch point was being held
     // we can't rely on point values anymore
     onHeightChanged: closeSwipeActive = false
+
+    HapticsEffect {
+        id: rumbleEffect
+        attackIntensity: 0.0
+        attackTime: 250
+        intensity: 1.0
+        duration: 100
+        fadeTime: 250
+        fadeIntensity: 0.0
+    }
 
     ConfigurationValue {
         id: enabledKeyboardLayouts
@@ -128,6 +139,7 @@ Item {
             repeat: true
             property int key
             onTriggered: {
+                rumbleEffect.start();
                 MInputMethodQuick.sendKey(key)
             }
         }
