@@ -31,7 +31,6 @@
 
 import QtQuick 2.6
 import "KeyboardUiConstants.js" as UI
-import QtQuick.Controls.Styles.Nemo 1.0
 import QtGraphicalEffects 1.15
 
 KeyBase {
@@ -42,9 +41,9 @@ KeyBase {
     property int sourceWidth: -1
     property int sourceHeight: -1
 
-    topPadding: Theme.itemSpacingExtraSmall
+    topPadding: dpi.value
     bottomPadding: topPadding
-    leftPadding: Theme.itemSpacingExtraSmall/2
+    leftPadding: dpi.value/2
     rightPadding: leftPadding
 
     showPopper: false
@@ -56,6 +55,7 @@ KeyBase {
         anchors.rightMargin: rightPadding
         anchors.topMargin: topPadding
         anchors.bottomMargin: bottomPadding
+        radius: dpi.value
     }
 
     Image {

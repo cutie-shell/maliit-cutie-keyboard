@@ -32,14 +32,12 @@
  */
 
 import QtQuick 2.6
-import QtQuick.Controls.Styles.Nemo 1.0
 import com.meego.maliitquick 1.0
 import org.nemomobile.configuration 1.0
 import QtFeedback 5.0
 
 import "touchpointarray.js" as ActivePoints
 import "layouts.js"  as KLayouts
-
 
 Item {
     id: keyboard
@@ -124,10 +122,9 @@ Item {
 
     Rectangle {
         id: tracker
-        width: Theme.itemWidthExtraSmall/2
+        width: 3*dpi.value
         height: width
         radius: width
-        border.width: width/12
         x:parent.width/2-tracker.width/2
         y:parent.height/2-tracker.height/2
         z: 100

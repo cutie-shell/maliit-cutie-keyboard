@@ -29,19 +29,18 @@
 
 import QtQuick 2.6
 import "KeyboardUiConstants.js" as UI
-import QtQuick.Controls.Styles.Nemo 1.0
-
 
 Rectangle {
     id: popper
 
-    color: (themeVariantConfig.value == "dark") ? "#ffffff" : "#000000"
+    color: (themeVariantConfig.value == "dark") ? "#8fffffff" : "#80000000"
     width: target ? target.width*1.2 : 0
     height: target ? target.height*1.2 : 0
     opacity: 0
     visible: target ? true : false
     anchors.bottomMargin: dpi.value
     property Item target: null
+    radius: dpi.value
 
     Text {
         id: popperText

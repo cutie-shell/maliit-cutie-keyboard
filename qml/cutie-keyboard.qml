@@ -86,7 +86,6 @@ Item {
     ConfigurationValue {
         id: dpiConfig
         key: "/home/cutie/homeScreen/dpi"
-        defaultValue: Screen.pixelDensity
     }
 
     Item {
